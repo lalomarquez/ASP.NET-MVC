@@ -1,0 +1,65 @@
+﻿@model List<CRUD.Models.PropertiesUser>
+@{
+    ViewBag.Title = "Lista";
+    WebGrid grid = new WebGrid(Model, rowsPerPage: 5);
+}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+<br /><br />
+<h2>Lista Read</h2>
+<hr />
+
+@*primera vista*@
+<h3>Primera Vista</h3>
+<p><b>WebGrid por default, excluyendo el ID</b></p>
+@*@grid.GetHtml()*@
+@grid.GetHtml(exclusions: new[] { "ID_User" })
+
+@*segunda vista*@
+<h3>Segunda Vista</h3>
+<p><b>Ordenando las columnas del WebGrid</b></p>
+@grid.GetHtml(
+columns: new[] {
+    grid.Column("Name"),
+    grid.Column("LastName"),
+    grid.Column("Email"),
+    grid.Column("Company"),
+    grid.Column("Date"),
+    grid.Column("Status")
+})
+
+@*tercera vista*@
+<h3>Tercera Vista</h3>
+<p><b>Styles al Webgrid</b></p>
+@grid.GetHtml(tableStyle: "table table-hover", rowStyle: "info", footerStyle: "pagination",
+columns: new[] {
+    grid.Column("Name", header: "Nombre"),
+    grid.Column("LastName", header: "Apellidos"),
+    grid.Column("Email", format: @<a href="mailto:@item.Email">@item.Email</a>),
+    grid.Column("Company"),
+    grid.Column("Date", canSort: false),
+    grid.Column("Status")
+})
+
+@*cuarta vista*@
+<h3>Cuarta Vista</h3>
+<p><b>Add Columnas</b></p>
+@grid.GetHtml(tableStyle: "table table-hover", rowStyle: "info", footerStyle: "pagination",
+mode: WebGridPagerModes.All,
+firstText: "<< Primera",
+        previousText: "< Anterior",
+        nextText: "Siguiente >",
+        lastText: "Última >>",
+columns: new[] {
+    grid.Column("ID_User", header: "ID"),
+    grid.Column("Name", header: "Nombre"),
+    grid.Column("LastName", header: "Apellidos"),
+    grid.Column("Email"),
+    grid.Column("Company"),
+    grid.Column("Date", canSort: false),
+    grid.Column("Status"),
+    grid.Column("Acciones",
+        format:@<text>
+        <button data-id="@item.ID_User" class="btn btn-primary btn-sm">View</button>
+        <button data-id="@item.ID_User" class="btn btn-primary btn-sm">Edit</button>
+        </text>)
+})
